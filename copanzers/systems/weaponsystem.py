@@ -5,18 +5,19 @@ from copanzers.systems import LogSystem
 from copanzers.components import *
 from copanzers import make
 
+
 class WeaponSystem (LogSystem):
 
-    def __init__ (self, maker, *args, **kw):
-        super ().__init__ (*args, **kw)
+    def __init__(self, maker, *args, **kw):
+        super().__init__(*args, **kw)
         self.maker = maker
 
-    def update (self, dt):
+    def update(self, dt):
 
         eman = self.entity_manager
-        for e, weapon in eman.pairs_for_type (Weapon):
+        for e, weapon in eman.pairs_for_type(Weapon):
 
-            weapon.till_reloaded = max (0, weapon.till_reloaded - dt)
+            weapon.till_reloaded = max(0, weapon.till_reloaded - dt)
 
             if weapon.triggered:
 
@@ -26,10 +27,10 @@ class WeaponSystem (LogSystem):
 
                 weapon.till_reloaded = weapon.reload_time
 
-                rot = eman.component_for_entity (e, Movement).angle
-                pos = eman.component_for_entity (e, Position)
-                ign = (eman.component_for_entity (e, Mountable).root,)
-                self.maker [weapon.bullet_type] (rot, ign, pos = pos)
+                rot = eman.component_for_entity(e, Movement).angle
+                pos = eman.component_for_entity(e, Position)
+                ign = (eman.component_for_entity(e, Mountable).root,)
+                self.maker[weapon.bullet_type](rot, ign, pos=pos)
 
-                self.log.debug ("Weapon %s fired bullet from %s with angle %i°.",
-                        e, pos, math.degrees (-rot))
+                self.log.debug("Weapon %s fired bullet from %s with angle %i°.",
+                               e, pos, math.degrees(-rot))

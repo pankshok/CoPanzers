@@ -3,28 +3,30 @@
 from ecs.exceptions import NonexistentComponentTypeForEntity
 
 from copanzers.systems import LogSystem
-from copanzers.components import Destroyed, Mount, Tags
+from copanzers.components import Destroyed, Mount  # , Tags
 
-def strip_entity (eman, e):
+
+def strip_entity(eman, e):
     """
     strip all components except Destroyed from an entity and all mounted
     entities
     """
     try:
-        for m in eman.component_for_entity (e, Mount).mounts:
-            strip_entity (eman, m)
+        for m in eman.component_for_entity(e, Mount).mounts:
+            strip_entity(eman, m)
     except NonexistentComponentTypeForEntity:
         pass
     finally:
-        eman.remove_entity (e)
-        eman.add_component (e, Destroyed ())
+        eman.remove_entity(e)
+        eman.add_component(e, Destroyed())
+
 
 class KillSystem (LogSystem):
 
-    def update (self, _):
+    def update(self, _):
 
         eman = self.entity_manager
         # pairs_for_type returns an iterator, so we make a copy of it to avoid
         # changing it while looping over it
-        for e, _ in tuple (eman.pairs_for_type (Destroyed)):
-            strip_entity (eman, e)
+        for e, _ in tuple(eman.pairs_for_type(Destroyed)):
+            strip_entity(eman, e)

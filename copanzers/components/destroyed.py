@@ -2,8 +2,9 @@
 
 from ecs.models import Component
 
+
 class Destroyed (Component):
     """
     We just use this one to tag dead entities
     """
-    pass 
+    pass
